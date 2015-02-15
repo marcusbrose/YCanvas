@@ -144,7 +144,8 @@ package sk.yoz.ycanvas.map.partitions
         protected function get url():String
         {
             var templates:Vector.<String> = config.urlTemplates;
-            var id:int = x / 5 + y / 3 + layer.level;
+            var id:int = Math.round( 2 * Math.random() );
+			// var id:int = x / 5 + y / 3 + layer.level;
             var url:String = templates[(id < 0 ? -id : id) % templates.length];
             url = url.replace("${x}", x / expectedWidth / layer.level);
             url = url.replace("${y}", y / expectedHeight / layer.level);
@@ -360,7 +361,14 @@ package sk.yoz.ycanvas.map.partitions
             error = true;
             bitmapData = null;
             stopLoading();
+			
+			if (++attempts < 5)
+			{
+				load();
+			}
         }
+		
+		private var attempts:int = 0;
         
         /**
         * Listener is invoked when reveal tween is complete.
